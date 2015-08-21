@@ -1,0 +1,26 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.io.openaperture.gradle:BuildDeployPlugin:0.0.1-SNAPSHOT"
+  }
+}
+
+apply plugin: "io.openaperture.gradle.build-deploy"
+
+task buildDeployOA(type: io.openaperture.gradle.BuildDeployTask)
+
+buildDeployOA {
+	deployRepo "My-Org/my_github_docker_deploy_repo"
+	deployRepoGitRef "abc123" //optional - defaults to master
+	sourceRepoGitRef "abc123" //optional - defaults to master
+	oaUrl "https://openaperture-mgr.myhost.co";
+	authUrl "https://auth.myhost.co/oauth/token";
+	authUsername "un";
+	authPassword "pw";
+	build true; //optional - defaults true
+	deploy true; //optional - defaults true
+}

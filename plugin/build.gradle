@@ -1,0 +1,56 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: "com.gradle.plugin-publish"
+
+def jdkHome = System.getenv("JAVA_HOME");
+def userHome = System.getProperty("user.home");
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
+  }
+}
+
+repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+}
+
+dependencies {
+    compile gradleApi()
+    compile files("$jdkHome/../lib/tools.jar")
+    testCompile 'junit:junit:4.11'
+    compile 'org.json:json:20140107'
+    compile 'org.apache.httpcomponents:httpclient:4.5'
+}
+
+group = 'io.openaperture.gradle'
+version = '0.0.1-SNAPSHOT'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri("$userHome/.m2/repository"))
+        }
+    }
+}
+
+pluginBundle {
+  website = 'http://openaperture.io'
+  vcsUrl = 'https://github.com/OpenAperture/gradle_build_deploy_plugin'
+  description = 'OpenAperture build/deploy plugin'
+  tags = ['OpenAperture', 'build', 'deploy']
+
+  plugins {
+    oaBuildDeployPlugin {
+      id = 'io.openaperture.gradle.build-deploy'
+      displayName = 'OpenAperture build/deploy plugin'
+    }
+  }
+}
